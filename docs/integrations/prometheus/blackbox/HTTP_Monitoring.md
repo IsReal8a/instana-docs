@@ -10,9 +10,9 @@ nav_order: 3
 Technical guide step-by-step on how to monitor HTTP webpages using the Prometheus blackbox exporter.
 {: .fs-6 .fw-300 }
 
-Instana official documentation about Prometheus
+IBM Instana official documentation about Prometheus
 
-[From Instana](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-prometheus){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[From IBM Instana](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-prometheus){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
 ## Pre-requisites
 
@@ -158,8 +158,9 @@ Yes, you can create your own dashboards and alerts, but we're limited by a few t
 ## What else can you do with this?
 
 Well, with the Prometheus Blackbox exporter you can monitor more things, just replace HTTP with DNS for example, you can get some inspiration from here:
-https://www.robustperception.io/probing-dns-servers-with-the-blackbox-exporter/
-https://dmachard.github.io/posts/0043-blackbox-prometheus-dns/
+
+* https://www.robustperception.io/probing-dns-servers-with-the-blackbox-exporter/
+* https://dmachard.github.io/posts/0043-blackbox-prometheus-dns/
 
 ## Next Steps
 
