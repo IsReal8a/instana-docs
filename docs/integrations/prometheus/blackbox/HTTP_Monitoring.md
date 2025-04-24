@@ -1,13 +1,13 @@
 ---
-title: Monitor HTTP webpages using Prometheus Blackbox exporter
+title: Monitor HTTP webpages using the Prometheus Blackbox exporter
 parent: Prometheus
 nav_order: 3
 ---
 
-# Monitor HTTP webpages using Prometheus Blackbox exporter
+# Monitor HTTP webpages using the Prometheus Blackbox exporter
 {: .no_toc }
 
-Technical guide on how to monitor HTTP webpages using Prometheus blackbox exporter.
+Technical guide step-by-step on how to monitor HTTP webpages using the Prometheus blackbox exporter.
 {: .fs-6 .fw-300 }
 
 Instana official documentation about Prometheus
@@ -154,6 +154,12 @@ Yes, you can create your own dashboards and alerts, but we're limited by a few t
 ### Grafana dashboard
 
 ![Grafana dashboard](image-4.png)
+
+## What else can you do with this?
+
+Well, with the Prometheus Blackbox exporter you can monitor more things, just replace HTTP with DNS for example, you can get some inspiration from here:
+https://www.robustperception.io/probing-dns-servers-with-the-blackbox-exporter/
+https://dmachard.github.io/posts/0043-blackbox-prometheus-dns/
 
 ## Next Steps
 
