@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Instana - The Lost Docs
+title: IBM Instana - The Lost Docs
 email: isuraeru@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   All documentation tailored and tested to work for IBMers.
