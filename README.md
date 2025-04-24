@@ -1,4 +1,4 @@
-# Instana docs
-Instana documentation that works for IBMers
+# IBM Instana - The Lost Docs
+IBM Instana documentation that works for everyone.
 
-To read them, go here: https://pages.github.ibm.com/Israel-Ochoa/instana-docs/
+To read them, go here: https://isreal8a.github.io/instana-docs/
