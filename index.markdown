@@ -11,7 +11,7 @@ permalink: /
 
 After years working with Instana, I realized that some step-by-step guides are needed to enable, configure and setup use cases for monitoring and observability. I created this documentation to be maintainable and have it up-to-date, instead of creating blogs that work for a few months or years and then get obsolete.
 
-IBM Instana is a powerful Observability tool and the current documentation state doesn't prove that, that's why, with these "Lost Docs", the goal is to share what you can do with Instana.
+IBM Instana is a powerful Observability Platform and the current documentation state doesn't prove that, that's why, with these "Lost Docs", the goal is to share what you can do with Instana.
 If you have any questions or comments, please see the About page.
 {: .fs-6 .fw-300 }
 
