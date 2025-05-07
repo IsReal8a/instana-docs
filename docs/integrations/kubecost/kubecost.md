@@ -13,7 +13,7 @@ With some slight changes, it should work for other implementations but for RedHa
 
 Official documentation
 
-[From IBM Instana](https://www.ibm.com/docs/en/instana-observability/1.0.293?topic=apis-integrating-kubecost-public-preview){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[From IBM Instana](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-integrating-kubecost){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 [From IBM Kubecost](https://www.ibm.com/docs/en/kubecost/self-hosted/2.x?topic=installation){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 <details open markdown="block">
