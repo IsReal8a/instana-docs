@@ -7,7 +7,7 @@ nav_order: 3
 # IBM Instana and IBM Concert integration
 {: .no_toc }
 
-Technical guide on how to integrate the IBM Instana backend with IBM Concert, this approach is using IBM Instana SaaS, IBM Concert running on VM and a Demo application running on RedHat Openshift.
+Technical guide on how to integrate the IBM Instana backend with IBM Concert, this approach is using IBM Instana SaaS, IBM Concert running on VM (it should work with trial SaaS) and a Demo application running on RedHat Openshift.
 With some slight changes, it should work for other implementations.
 {: .fs-6 .fw-300 }
 
