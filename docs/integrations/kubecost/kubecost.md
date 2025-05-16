@@ -9,6 +9,8 @@ nav_order: 3
 
 Technical guide on how to integrate IBM Instana with IBM Kubecost, this approach is using the Instana agent running in one RedHat OpenShift cluster and Kubecost free tier.
 With some slight changes, it should work for other implementations but for RedHat OpenShift it was a bit harder than expected.
+
+Updated: 16 May 2025
 {: .fs-6 .fw-300 }
 
 Official documentation
@@ -58,20 +60,38 @@ Install IBM Kubecost on RedHat Openshift
 {: .warning }
 > It's imperative to install it with the same `clusterName` defined in the Instana agent configuration, for example, I defined the `clusterName` in Instana as `CP4BA_IO`, the same `clusterName` needs to be used in Kubecost.
 
+> In the official documentation isn't clearly specify how to create a route for Kubecost, this will be needed for better integration, for that, I went into the depths and found a key that needs to be added in the helm command.
+
+Use this yaml for route enabled, combination from [Openshift values](https://raw.githubusercontent.com/kubecost/cost-analyzer-helm-chart/v2.5/cost-analyzer/values-openshift.yaml) and [values](https://github.com/kubecost/cost-analyzer-helm-chart/blob/v2.6/cost-analyzer/values.yaml):
+
+```yaml
+# This Helm values file is a modified version of `values.yaml`.
+# This file is meant to be used by users deploying Kubecost to OpenShift (OCP) clusters. For more configuration options, see `values.yaml`.
+global:
+  # Platforms is a higher-level abstraction for platform-specific values and settings.
+  platforms:
+    # Deploying to OpenShift (OCP) requires enabling this option.
+    openshift:
+      enabled: true  # Deploy Kubecost to OpenShift.
+      route:
+        enabled: true  # Create an OpenShift Route.
+        annotations: { host: apps.example.ibm.com }  # Add annotations to the Route.
+```
+
+Save it as `values-openshift.yaml` and install it:
+
 ```shell
 helm upgrade --install kubecost kubecost/cost-analyzer -n kubecost --create-namespace \
--f https://raw.githubusercontent.com/kubecost/cost-analyzer-helm-chart/v2.5/cost-analyzer/values-openshift.yaml \
+-f values-openshift.yaml \
 --set kubecostProductConfigs.clusterName=CP4BA_IO \
 --set prometheus.server.global.external_labels.cluster_id=CP4BA_IO
 ```
 
 ### How to access the IBM Kubecost UI
 
-Do a port forwarding as shown below and open http://localhost:9090 in your browser.
+Open the route in the browser (You can find it in Networking->Routes on Openshift):
 
-```shell
-kubectl port-forward --namespace kubecost deployment/kubecost-cost-analyzer 9090
-```
+https://kubecost-cost-analyzer-route-kubecost.apps.example.ibm.com/overview
 
 ![Kubecost UI](image.png)
 
@@ -90,15 +110,6 @@ helm uninstall kubecost -n kubecost
 Now that you have IBM Kubecost up and running you need to configure the Instana agent to communicate with Kubecost, you can go and use the official documentation but that doesn't work for RedHat OpenShift:
 
 [Instana and Kubecost](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-integrating-kubecost-public-preview){: .btn }
-
-### Look for the IBM Kubecost "URL"
-
-Well, IBM Kubecost doesn't expose that to the world it seems but it's being shared by the `kubecost-cost-analyzer` deployment, lets use Instana to get that.
-
-Go to the left hand side menu and click in "Platforms"-> "Kubernetes" and search for your cluster, once there, go to the `kubecost` namespace then `kubecost-cost-analyzer` deployment, something like this:
-![Kubecost cost analyzer deployment](image-1.png)
-
-There, in that example, you can see that the service is located in `172.30.192.31` on port `9090`, that's the one we need to continue.
 
 ### Build your IBM Instana agent CR YAML and apply it
 
@@ -124,7 +135,7 @@ spec:
     configuration_yaml: |
       com.instana.plugin.kubecost:
         remote:
-          - url: '172.30.192.31:9090'
+          - url: 'https://kubecost-cost-analyzer-route-kubecost.apps.example.ibm.com'
             poll_rate: 1800 # seconds
             clusters: #List of one or more k8s cluster names.
             - 'CP4BA_IO'
