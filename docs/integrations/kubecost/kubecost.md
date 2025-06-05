@@ -10,7 +10,7 @@ nav_order: 3
 Technical guide on how to integrate IBM Instana with IBM Kubecost, this approach is using the Instana agent running in one RedHat OpenShift cluster and Kubecost free tier.
 With some slight changes, it should work for other implementations but for RedHat OpenShift it was a bit harder than expected.
 
-Updated: 16 May 2025
+Updated: 5 May 2025
 {: .fs-6 .fw-300 }
 
 Official documentation
@@ -104,6 +104,9 @@ Delete IBM Kubecost!
 ```shell
 helm uninstall kubecost -n kubecost
 ```
+
+{: .important }
+> If you want to crosscheck and see how to install Kubecost with self-signed certificates from Let's Encrypt, read Jignesh's contribution [HERE](https://github.com/IsReal8a/instana-examples/blob/main/contrib/kubecost_install_with_cert.md)
 
 ## IBM Instana configuration
 
