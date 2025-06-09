@@ -10,7 +10,7 @@ nav_order: 3
 Technical guide on how to integrate IBM Instana with IBM Kubecost, this approach is using the Instana agent running in one RedHat OpenShift cluster and Kubecost free tier.
 With some slight changes, it should work for other implementations but for RedHat OpenShift it was a bit harder than expected.
 
-Updated: 5 May 2025
+Updated: 5 June 2025
 {: .fs-6 .fw-300 }
 
 Official documentation
