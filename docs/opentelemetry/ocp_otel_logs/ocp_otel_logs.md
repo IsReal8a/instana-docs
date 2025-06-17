@@ -10,6 +10,8 @@ nav_order: 3
 Technical guide step-by-step to enable Opentelemetry in the Instana agent and install the Opentelemetry collector to send logs from OCP to Instana.
 
 With some slight changes, it should work for other implementations.
+
+Update: 17 June 2025
 {: .fs-6 .fw-300 }
 
 Official documentation
@@ -48,7 +50,8 @@ You can collect metrics, traces and logs using Opentelemetry but since this is q
 
 ## Enabling the IBM Instana Logs feature
 
-At the time of writing this guide, you need to ask your IBM representative to enable the feature in SaaS.
+{: .important }
+> At the time of writing this guide, you need to ask your IBM representative to enable the feature in SaaS.
 
 For self-hosted, you need to run the following command for the Standard edition:
 
