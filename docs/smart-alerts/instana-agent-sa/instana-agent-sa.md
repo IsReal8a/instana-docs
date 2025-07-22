@@ -4,7 +4,7 @@ parent: Smart-alerts
 nav_order: 3
 ---
 
-# IBM Instana Smart Alerts
+# IBM Instana Agent Smart Alerts
 {: .no_toc }
 
 Technical guide on how to create Smart alerts to monitor your Instana Agents.
