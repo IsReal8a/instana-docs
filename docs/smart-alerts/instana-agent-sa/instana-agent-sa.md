@@ -37,7 +37,7 @@ You should see something like this:
 Now that we know how many Agents we have, we can create our Smart Alert and make sure we match that value.
 
 
-## Create the Smart Alert
+### Create the Smart Alert
 
 On the menu in the left hand side go to "Infrastructure", click on the "Smart Alerts" tab and then the "Create Smart Alert" button.
 

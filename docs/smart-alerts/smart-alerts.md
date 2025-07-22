@@ -1,5 +1,5 @@
 ---
-title: Smart alerts
+title: Smart-alerts
 nav_order: 2
 ---
 
