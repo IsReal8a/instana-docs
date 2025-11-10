@@ -16,6 +16,10 @@ Official documentation
 
 [From Avio Consulting](https://avioconsulting.github.io/mule-opentelemetry-module/){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
 
+[Avio Consulting Github](https://github.com/avioconsulting/mule-opentelemetry-module){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+
+[Avio Consulting OpenTelemetry Module Connector Reference](https://avioconsulting.github.io/mule-opentelemetry-module/opentelemetry-documentation.html){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+
 <details open markdown="block">
   <summary>
     Table of contents
@@ -29,7 +33,7 @@ Official documentation
 
 ## Where is the guide?
 
-Updated: 30 October 2025
+Updated: 10 November 2025
 
 {: .warning }
 > For this one I decided to have it on a Github repo for quick access and updates, I'm going to see how this works.
