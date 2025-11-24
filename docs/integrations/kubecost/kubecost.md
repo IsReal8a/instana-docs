@@ -9,7 +9,7 @@ nav_order: 3
 
 Technical guide on how to integrate IBM Instana with IBM Kubecost, this approach is using the Instana agent running in one RedHat OpenShift cluster and Kubecost free tier.
 With some slight changes, it should work for other implementations but for RedHat OpenShift it was a bit harder than expected.
-Latest revision to work with Kubecost version 2.8.0.
+Latest revision to work with Kubecost version 2.8.4.
 
 Updated: 24 November 2025
 {: .fs-6 .fw-300 }
@@ -41,12 +41,12 @@ You can subscribe to the IBM Kubecost Free tier and start testing it:
 
 Note, the official documentation doesn't cover the following:
 
-- It mentions version 2.5 and the latest version supported is 2.8.x.
+- It mentions version 2.5 and the latest version supported is 2.8.4.
 - Version 2.9 is used for migration to version 3.0 only.
 
 [Provider Installations](https://www.ibm.com/docs/en/kubecost/self-hosted/2.x?topic=installation-provider-installations){: .btn }
 
-The following is to install IBM Kubecost version 2.8.0 using the Standard deployment, read the deployment guide first to get familiar with the documentation:
+The following is to install IBM Kubecost version 2.8.0 (you can go to 2.8.4) using the Standard deployment, read the deployment guide first to get familiar with the documentation:
 
 [IBM Kubecost Standard deployment guide](https://www.ibm.com/docs/en/kubecost/self-hosted/2.x?topic=installations-install-kubecost-red-hat-openshift#standard-deployment-guide){: .btn }
 
@@ -185,17 +185,7 @@ spec:
     downloadKey: key
     endpointHost: ingress-red-saas.instana.io
     endpointPort: "443"
-    env:
-      JAVA_OPTS: "-Djavax.net.ssl.trustStore=/opt/custom-certs/cacerts -Djavax.net.ssl.trustStorePassword=powerfulpassword"
-    pod:
-      volumeMounts:
-        - name: custom-truststore
-          mountPath: /opt/custom-certs
-          readOnly: true
-      volumes:
-        - name: custom-truststore
-          secret:
-            secretName: instana-truststore
+    env: {}
     configuration_yaml: |
       com.instana.plugin.kubecost:
         remote:
