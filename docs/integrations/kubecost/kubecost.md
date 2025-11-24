@@ -30,14 +30,14 @@ Official documentation
 
 ---
 
-## IBM KubeCost configuration
-### Install/Upgrade KubeCost
+## IBM Kubecost configuration
+### Install IBM Kubecost
 
 This guide is going to help you integrate an Instana agent running in RedHat OpenShift with Kubecost, on this guide both are running on the same cluster.
 
 You can subscribe to the IBM Kubecost Free tier and start testing it:
 
-[Install IBM KubeCost](https://www.apptio.com/products/kubecost/#kub-install){: .btn }
+[Install IBM Kubecost](https://www.apptio.com/products/kubecost/#kub-install){: .btn }
 
 Note, the official documentation doesn't cover the following:
 
@@ -115,6 +115,40 @@ Delete IBM Kubecost!
 
 ```shell
 helm uninstall kubecost -n kubecost
+```
+
+### Upgrade IBM Kubecost
+
+In this guide I installed version 2.8.0 but the latest is 2.8.4 at the time of updating this guide, this is how you upgrade Kubecost:
+
+```shell
+helm upgrade kubecost kubecost/cost-analyzer -n kubecost --version 2.8.4
+```
+
+If everything went well, you should see something like:
+
+```shell
+Release "kubecost" has been upgraded. Happy Helming!
+NAME: kubecost
+LAST DEPLOYED: Mon Nov 24 13:37:41 2025
+NAMESPACE: kubecost
+STATUS: deployed
+REVISION: 2
+NOTES:
+--------------------------------------------------
+Kubecost 2.8.4 has been successfully installed.
+
+Kubecost 2.x is a major upgrade from previous versions and includes major new features including a brand new API Backend. Please review the following documentation to ensure a smooth transition: https://www.ibm.com/docs/en/kubecost/self-hosted/2.x?topic=installation-kubecost-v2-installupgrade
+
+When pods are Ready, you can enable port-forwarding with the following command:
+
+    kubectl port-forward --namespace kubecost deployment/kubecost-cost-analyzer 9090
+
+Then, navigate to http://localhost:9090 in a web browser.
+
+Please allow 25 minutes for Kubecost to gather metrics. A progress indicator will appear at the top of the UI.
+
+Having installation issues? View our Troubleshooting Guide at https://www.ibm.com/docs/en/kubecost/self-hosted/2.x?topic=troubleshoot-install
 ```
 
 ## IBM Instana configuration
