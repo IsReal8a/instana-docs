@@ -9,8 +9,9 @@ nav_order: 3
 
 Technical guide on how to integrate IBM Instana with IBM Kubecost, this approach is using the Instana agent running in one RedHat OpenShift cluster and Kubecost free tier.
 With some slight changes, it should work for other implementations but for RedHat OpenShift it was a bit harder than expected.
+Latest revision to work with Kubecost version 2.8.0.
 
-Updated: 5 June 2025
+Updated: 24 November 2025
 {: .fs-6 .fw-300 }
 
 Official documentation
@@ -32,19 +33,20 @@ Official documentation
 ## IBM KubeCost configuration
 ### Install/Upgrade KubeCost
 
-You need to install IBM Kubecost on the same platform where you have the Instana agent running, this guide is going to help you integrate an Instana agent running in RedHat OpenShift.
+This guide is going to help you integrate an Instana agent running in RedHat OpenShift with Kubecost, on this guide both are running on the same cluster.
 
-If you subscribe to the IBM Kubecost Free tier then you will get this page:
+You can subscribe to the IBM Kubecost Free tier and start testing it:
 
-[Install IBM KubeCost](https://www.kubecost.com/install#show-instructions){: .btn }
+[Install IBM KubeCost](https://www.apptio.com/products/kubecost/#kub-install){: .btn }
 
-However, that may not be what you're looking for, because, you may have another provider like OpenShift:
+Note, the official documentation doesn't cover the following:
+
+- It mentions version 2.5 and the latest version supported is 2.8.x.
+- Version 2.9 is used for migration to version 3.0 only.
 
 [Provider Installations](https://www.ibm.com/docs/en/kubecost/self-hosted/2.x?topic=installation-provider-installations){: .btn }
 
-I'm going to guide you how to install IBM Kubecost using the Standard deployment:
-
-Read the below first to get familiar with the documentation:
+The following is to install IBM Kubecost version 2.8.0 using the Standard deployment, read the deployment guide first to get familiar with the documentation:
 
 [IBM Kubecost Standard deployment guide](https://www.ibm.com/docs/en/kubecost/self-hosted/2.x?topic=installations-install-kubecost-red-hat-openshift#standard-deployment-guide){: .btn }
 
@@ -52,17 +54,19 @@ In a host with connectivity to your OpenShift cluster (assuming you're logged-in
 
 ```shell
 helm repo add kubecost https://kubecost.github.io/cost-analyzer/
+```
+```shell
 helm repo update
 ```
 
 Install IBM Kubecost on RedHat Openshift
 
 {: .warning }
-> It's imperative to install it with the same `clusterName` defined in the Instana agent configuration, for example, I defined the `clusterName` in Instana as `CP4BA_IO`, the same `clusterName` needs to be used in Kubecost.
+> It's imperative to install it with the same `clusterName` defined in the Instana agent configuration, for example, I defined the `clusterName` in Instana as `AlfaCentauri`, the same `clusterName` needs to be used in Kubecost. At some point in some version there was a change that you required a `clusterID` now.
 
-> In the official documentation isn't clearly specify how to create a route for Kubecost, this will be needed for better integration, for that, I went into the depths and found a key that needs to be added in the helm command.
+> In the official documentation isn't clearly specify how to create a route for Kubecost, this will be needed for better integration, for that, I went into the depths and found a key that needs to be added in the `Helm` command.
 
-Use this yaml for route enabled, combination from [Openshift values](https://raw.githubusercontent.com/kubecost/cost-analyzer-helm-chart/v2.5/cost-analyzer/values-openshift.yaml) and [values](https://github.com/kubecost/cost-analyzer-helm-chart/blob/v2.6/cost-analyzer/values.yaml):
+Use the YAML below for reference, combination from [Openshift values](https://raw.githubusercontent.com/kubecost/cost-analyzer-helm-chart/v2.8/cost-analyzer/values-openshift.yaml) and [general values](https://github.com/kubecost/cost-analyzer-helm-chart/blob/v2.8/cost-analyzer/values.yaml):
 
 ```yaml
 # This Helm values file is a modified version of `values.yaml`.
@@ -78,20 +82,28 @@ global:
         annotations: { host: apps.example.ibm.com }  # Add annotations to the Route.
 ```
 
-Save it as `values-openshift.yaml` and install it:
+Save it as `values-openshift.yaml`.
+
+{: .important }
+> If you want to see how to install Kubecost with self-signed certificates from Let's Encrypt, read Jignesh's contribution [HERE](https://github.com/IsReal8a/instana-examples/blob/main/contrib/kubecost_install_with_cert.md)
+
+Install Kubecost, I'm removing Grafana and using `values-openshift.yaml`:
 
 ```shell
-helm upgrade --install kubecost kubecost/cost-analyzer -n kubecost --create-namespace \
+helm upgrade --install kubecost kubecost/cost-analyzer -n kubecost --create-namespace --version 2.8.0 \
 -f values-openshift.yaml \
---set kubecostProductConfigs.clusterName=CP4BA_IO \
---set prometheus.server.global.external_labels.cluster_id=CP4BA_IO
+  --set global.clusterId=AlfaCentauri \
+  --set kubecostProductConfigs.clusterName=AlfaCentauri \
+  --set prometheus.server.global.external_labels.cluster_id=AlfaCentauri \
+  --set global.grafana.enabled=false \
+  --set global.grafana.proxy=false
 ```
 
 ### How to access the IBM Kubecost UI
 
-Open the route in the browser (You can find it in Networking->Routes on Openshift):
+Open the route in the browser (You can find it in Networking->Routes on Openshift), since I followed the Letsencrypt guide I have one route like this:
 
-https://kubecost-cost-analyzer-route-kubecost.apps.example.ibm.com/overview
+https://kubecost.apps.example.ibm.com/overview
 
 ![Kubecost UI](image.png)
 
@@ -105,18 +117,23 @@ Delete IBM Kubecost!
 helm uninstall kubecost -n kubecost
 ```
 
-{: .important }
-> If you want to crosscheck and see how to install Kubecost with self-signed certificates from Let's Encrypt, read Jignesh's contribution [HERE](https://github.com/IsReal8a/instana-examples/blob/main/contrib/kubecost_install_with_cert.md)
-
 ## IBM Instana configuration
 
-Now that you have IBM Kubecost up and running you need to configure the Instana agent to communicate with Kubecost, you can go and use the official documentation but that doesn't work for RedHat OpenShift:
+Now that you have IBM Kubecost up and running you need to configure the Instana agent to communicate with Kubecost, you can go and use the official documentation but we need to make it work for RedHat OpenShift:
 
 [Instana and Kubecost](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-integrating-kubecost-public-preview){: .btn }
 
 ### Build your IBM Instana agent CR YAML and apply it
 
-You need to push the new configuration to the Instana agent (or install it for first time if you haven't), remember the `clusterName` needs to be the same in both places, plus, you need to use the same name in the `clusters` value inside the Kubecost plugin, you can use the following Instana agent configuration as an example and modify it to match your values, pay attention to the `url` and the `port` in the configuration as this is the IP address and port I got from the previous section, if you don't do all this, you won't see a thing in the Instana UI:
+You need to push the new configuration to the Instana agent (or install it for first time if you haven't), remember the `clusterName` needs to be the same in both places, plus, you need to use the same name in the `clusters` value inside the Kubecost plugin, you can use the following Instana agent configuration as an example and modify it to match your values, pay attention to the `url` and the `port` in the configuration as this is the IP address and port I got from the previous section, if you don't do all this, you won't see a thing in the Instana UI.
+
+I installed the agent using the Operator:
+
+```shell
+oc apply -f https://github.com/instana/instana-agent-operator/releases/latest/download/instana-agent-operator.yaml
+```
+
+Then, I used the following YAML for my Instana Agent CR:
 
 ```shell
 apiVersion: instana.io/v1
@@ -126,37 +143,54 @@ metadata:
   namespace: instana-agent
 spec:
   zone:
-    name: DarkZone # (optional) name of the zone of the host
+    name: DarkZone
   cluster:
-      name: CP4BA_IO
+      name: AlfaCentauri
   agent:
-    key: AGENT_KEY
-    downloadKey: DOWNLOAD_KEY
-    endpointHost: ingress-orange-saas.instana.io
+    key: key
+    downloadKey: key
+    endpointHost: ingress-red-saas.instana.io
     endpointPort: "443"
-    env: {}
+    env:
+      JAVA_OPTS: "-Djavax.net.ssl.trustStore=/opt/custom-certs/cacerts -Djavax.net.ssl.trustStorePassword=powerfulpassword"
+    pod:
+      volumeMounts:
+        - name: custom-truststore
+          mountPath: /opt/custom-certs
+          readOnly: true
+      volumes:
+        - name: custom-truststore
+          secret:
+            secretName: instana-truststore
     configuration_yaml: |
       com.instana.plugin.kubecost:
         remote:
-          - url: 'https://kubecost-cost-analyzer-route-kubecost.apps.example.ibm.com'
-            poll_rate: 1800 # seconds
-            clusters: #List of one or more k8s cluster names.
-            - 'CP4BA_IO'
+          - url: 'https://kubecost.apps.example.ibm.com'
+            poll_rate: 1800
+            clusters:
+            - 'AlfaCentauri'
 ```
 
 Save the file as `instana-agent-cr.yaml` and apply it:
 
 ```shell
-kubectl apply -f instana-agent-cr.yaml
+oc apply -f instana-agent-cr.yaml
 ```
 
-If everything went well, on the Instana UI, go to the left hand side menu, click "Platforms"-> "Kubernetes", search for your Cluster and at the end you're going to see the tab "Cost" click on it and you should have something similar as this:
+Verify all your pods are up and running:
 
-![Instana Kubecost info](image-2.png)
+```shell
+oc get pods -n instana-agent -w
+```
+
+Check your logs and see if you don't have any kubecost issues:
+
+```shell
+oc logs -n instana-agent -l app.kubernetes.io/name=instana-agent --tail=200 | grep -i kubecost
+```
+
+If everything went well, on the Instana UI, go to the left hand side menu, click "Platforms"-> "Kubernetes", search for your Cluster, click on it, you're going to see the tabs just go at the end of them and you're going to see the "Cost" tab, click on it and you should have something like this:
+
+![Instana UI](image-1.png)
 
 If you do, that's it!
-
-## Exploring uncharted territory
-
-So far, with this installation, you get Prometheus and Grafana with KubeCost, but you may not need to access them... what if we use the Prometheus endpoints to send the data to Instana and then use the Instana UI for our purposes...
-That's another chapter.
