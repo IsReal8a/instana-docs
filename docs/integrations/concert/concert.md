@@ -14,8 +14,8 @@ With some slight changes, it should work for other implementations.
 Official documentation
 Read both links before proceeding.
 
-[From IBM Instana](https://www.ibm.com/docs/en/instana-observability/1.0.295?topic=apis-integrating-concert){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[From IBM Concert](https://www.ibm.com/docs/en/concert?topic=connections-integrating-instana-observability){: .btn .fs-5 .mb-4 .mb-md-0 }
+[From IBM Instana](https://www.ibm.com/docs/en/instana-observability?topic=hosted-integrating-concert){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[From IBM Concert](https://www.ibm.com/docs/en/concert/current?topic=systems-integrating-instana-observability){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 <details open markdown="block">
   <summary>
@@ -37,14 +37,17 @@ Read both links before proceeding.
 > Before starting, you should have admin access to both, Instana and Concert and admin access to the OpenShift server where the DEMO app will be installed.
 
 ## The meaning of this integration
-If you read the documentation it may seem like you just need this integration to feed the data from Instana to Concert and to see the CVEs on Instana, but this is a bit more profound per say.
+If you read the documentation it may seem like you just need this integration to feed the data from Instana to Concert to see the CVEs on Instana, but this is a bit more profound per say.
 
 ### You feed application definitions in Concert from Instana
 Yes, with the integration "Instana to Concert" the application definitions will be populated automatically in Concert from the, please note, **Application Perspectives** found in Instana. Those are know as **application definitions** in Concert.
-This mean that you don't need to create, build and apply SBOMs from your applications, all will be fed by Instana.
+This means that you don't need to create, build and apply SBOMs from your applications, all will be fed by Instana.
 
 ### You feed CVE information in Instana from Concert
-On Instana in the application perspective, you're going to see a tab called Vulnerabilities, that is fed by the Instana agent configuration.
+On Instana in the application perspective, you're going to see a tab called "Vulnerabilities", that is fed by the Instana agent configuration.
+
+{: .warning }
+> Important for you to know, this is the manual/hard way to do this for you to learn how things work, if you scroll at the bottom you have more elaborated labs created by the IBM IT & Network Automation Tiger Team.
 
 ## Ingredients
 A demo APP, we're going to use [QOTD from IBM](https://gitlab.com/quote-of-the-day).
@@ -171,6 +174,7 @@ kubectl apply -f https://github.com/instana/instana-agent-operator/releases/late
 ```
 
 ### Create instana-agent-cr.yaml
+Copy this information to a YAML file and change the values and save it.
 
 ```yaml
 apiVersion: instana.io/v1
@@ -235,7 +239,7 @@ This is just to connect to the Instana instance, you need to create something th
 
 ### Create Instana ingestion job
 
-Again, the [documentation](https://www.ibm.com/docs/en/concert?topic=connections-integrating-instana-observability#integrating_with_instana__title__4) is straight-forward but I think it's missing some key aspects for your consideration before creating one ingesting job.
+Again, the [documentation](https://www.ibm.com/docs/en/concert/current?topic=systems-integrating-instana-observability) is straight-forward but I think it's missing some key aspects for your consideration before creating one ingesting job.
 
 {: .warning }
 > The ingesting job is going to retrieve the information from ALL application perspectives in Instana with live traffic in the last 7 days.
@@ -247,9 +251,6 @@ Again, the [documentation](https://www.ibm.com/docs/en/concert?topic=connections
 
 {: .warning }
 > LIMITATION: There is no way to tell which applications we need, but work is in progress, thus we can't assign different environments using ingestion jobs from the same Instana connection.
-
-{: .warning }
-> LIMITATION: We can't delete a few or more application definitions on the UI, work in progress.
 
 Once the ingestion job is created, just run it!
 
@@ -336,3 +337,13 @@ AlfaCentauri-QOTD Instana Vulnerabilities
 Resilience overall potential disruption cost per hour
 
 ![Resilience at Concert home page](image-19.png)
+
+## IBM IT & Network Automation Tiger Team Concert labs
+
+If you liked this integration and want to try more complicated use cases including Concert Workflows and ticketing systems, then you should play with these labs:
+
+[IBM Concert Tech Jam Labs](https://ibm.github.io/waiops-tech-jam/labs/concert/introduction/){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+
+- More elaborated Vulnerability use cases.
+- Certificate Health
+- OS Auto-patching
