@@ -11,10 +11,12 @@ Technical guide on how to integrate the IBM Instana backend with IBM Turbonomic,
 With some slight changes, it should work for other implementations.
 {: .fs-6 .fw-300 }
 
+Update: 21 April 2026
+
 Official documentation
 
-[From IBM Instana](https://www.ibm.com/docs/en/instana-observability/current?topic=apis-integrating-turbonomic){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[From IBM Turbonomic](https://www.ibm.com/docs/en/tarm/8.15.2?topic=targets-instana){: .btn .fs-5 .mb-4 .mb-md-0 }
+[From IBM Instana](https://www.ibm.com/docs/en/instana-observability?topic=hosted-integrating-turbonomic){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[From IBM Turbonomic](https://www.ibm.com/docs/en/tarm/8.19.4?topic=targets-instana){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 <details open markdown="block">
   <summary>
@@ -165,7 +167,7 @@ More information about the Instana agent in RedHat OpenShift:
 
 In the official documentation it's mentioned that you need to add an Instana target but that **IS NOT** enabled by default in the Turbonomic Targets, you need to enable targets when needed, and for that is a complete path by it's own, after researching, all information can be found when creating an instance here:
 
-[Install Targets](https://www.ibm.com/docs/en/tarm/8.15.2?topic=cluster-installing-red-hat-openshift-using-operatorhub#WebConsole_OpShft__install_targets){: .btn }
+[Install Targets](https://www.ibm.com/docs/en/tarm/8.19.4?topic=turbonomic-installing-red-hat-openshift-using-operatorhub#WebConsole_OpShft__install_targets){: .btn }
 
 {: .important-title }
 > From the Docs
